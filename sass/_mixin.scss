@@ -1,0 +1,79 @@
+@mixin center($width: null, $height: null) {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  @if not $width and not $height {
+    transform: translate(-50%, -50%);
+  } @else if $width and $height {
+    width: $width;
+    height: $height;
+    margin: -($width / 2) #{0 0} -($height / 2);
+  } @else if not $height {
+    width: $width;
+    margin-left: -($width / 2);
+    transform: translateY(-50%);
+  } @else {
+    height: $height;
+    margin-top: -($height / 2);
+    transform: translateX(-50%);
+  }
+}
+
+@mixin center-vertical( $height: null) {
+  position: absolute;
+  top: 50%;
+
+  @if not $height {
+    transform: translateY(-50%);
+  } @else {
+    margin-top:-($height/2);
+  }
+}
+
+$properties: (16, 12, 20, 24);
+@mixin font-size() {
+  @each $prop in $properties {
+    .font-#{$prop}{
+      font-size:#{$prop}px;
+    }
+  }
+}
+
+$container-width:1200px;
+$gutter-width:10px;
+$columns:12;
+
+@mixin make-row($gutter-width){
+  margin-right:- $gutter-width;
+  @include pie-clearfix();
+}
+
+%grid{
+  margin-right: $gutter-width;
+  float: left;
+}
+
+@mixin make-columns($container-width, $gutter-width, $columns){
+  width: (($container-width + $gutter-width) - ($gutter-width * $columns)) / $columns;
+  @extend %grid;
+}
+
+@mixin responsive($width) {
+  @if $width == wide-screens {
+    @media only screen and (max-width: $width-large) { @content; }
+  }
+  @else if $width == medium-screens {
+    @media only screen and (max-width: $width-medium) { @content; }
+  }
+  @else if $width == small-screens {
+    @media only screen and (max-width: $width-small) { @content; }
+  }
+}
+
+@mixin side-bar-item-bg-position($pos, $hoverpos){
+  background-position:0 $pos;
+  &:hover{
+    background-position:0 $hoverpos;
+  }
+}
